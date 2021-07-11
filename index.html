@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+    
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My vélo</title>
+
+    <!--Leaflet map-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+
+
+    <!--MarkesCluster-->
+    <link rel="stylesheet" href="dist/MarkerCluster.css">
+    <link rel="stylesheet" href="dist/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="dist/leaflet.awesome-markers.css">
+
+    <!-- Boostrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Fontawesome -->
+    <script src="https://kit.fontawesome.com/ac2774ce97.js" crossorigin="anonymous"></script>
+
+    <!-- JavaScript -->
+    <script defer src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+    <!--JS maker leaflet-->
+    <script defer src="dist/leaflet.awesome-markers.js"></script>
+    <script defer src="dist/leaflet.markercluster.js"></script>
+    <!--JS perso-->
+    <script defer src="diapo.js"></script>
+    <script defer src="compteur.js"></script>
+    <script defer src="carte.js"></script>
+    <script defer src="canvas.js"></script>
+    <script defer src="main.js"></script>
+
+
+</head>
+
+<body onload="onLoad()">
+    <header>
+        <div id="containLogo">
+            <img id="logo" class="img-fluid" src="img/logo2.png" alt="logo">
+        </div>
+        <div id="blocTitre">
+            <h1>MY VÉLO location en ligne</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="carousel">
+            <div class="slider">
+                <div class="sliders">
+                    <div class="slide"><img src="img/diapo1.png" alt=""></div>
+                    <div class="slide"><img src="img/diapo2.png" alt=""></div>
+                    <div class="slide"><img src="img/diapo3.png" alt=""></div>
+                    <div class="slide"><img src="img/diapo4.png" alt=""></div>
+                </div>
+            </div>
+            <div id="containerBoutons">
+                <div class="boutons" id="boutonGauche">
+                    <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                </div>
+                <div class="boutons" id="boutonDroite">
+                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div id="statutSlider">
+                <div id="pause"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pause-fill"
+                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z" />
+                    </svg>
+                </div>
+                <div id="play"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-play-fill"
+                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
+                    </svg>
+                </div>
+            </div>
+
+        </section>
+        <section class="container-fluid">
+            <div class="row">
+                <div id="map" class="col-12 col-xl-8 m-2"></div>
+
+                <div class="droite m-2 col-12 col-xl-3">
+                    <p id="label">Sélectionnez une station sur la carte pour réserver un vélo</p>
+
+                    <p id="address"></p>
+
+                    <p>
+                        <span class="color" id="status"></span>
+                    </p>
+                    <p id="velosDisponibles"></p>
+                    <p id="capacity"></p>
+                    <form>
+                        <p>
+                            <input id="nomForm" type="text" name="nom" placeholder="Nom*" required=""
+                                pattern="[A-Za-z -èéàçêëïîâä]{2,15}">
+                        </p>
+                        <p>
+                            <input id="prenomForm" type="text" name="prenom" placeholder="Prénom*" required=""
+                                pattern="[A-Za-z -èéàçêëïîâä]{2,15}">
+                        </p>
+
+                        <!--<input type="submit" value="envoyer"> -->
+                        <div id="erreur">
+                            A simple danger alert—check it out!
+                        </div>
+                        <button id="validForm" type="button" class="btn btn-primary">
+                            envoyer
+                        </button>
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Signature</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <canvas id="canvas"></canvas>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Fermer</button>
+                                        <button type="button" class="btn btn-primary" id="reserver">Réserver</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div id="blockReservation" class="row">
+                <div class="reservation col-12 col-lg-8 m-2 p-3">
+                    <p id="infosReservation"></p>
+                    <p id="timer">Réservation</p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+</body>
+
+
+</html>
